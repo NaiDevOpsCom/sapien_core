@@ -14,6 +14,8 @@ const pool = new Pool({
     host: '127.0.0.1',
 })
 
+
+
 function email_validator(email) {
     let emailRex = /^([\w-\.]+@(([\w-]+\.)+[\w-]{2,4}))?$/;
     var bad_domains = ['mozej.', 'mailinator.', 'mailna.', 'mohmal.', 'boxomail.', 'migonom.', 'kellychibale-researchgroup-uct.', 'mailo.', 'ema-sofia.', 'hungeral.'
@@ -77,6 +79,7 @@ async function auditLog(req) {
         // callback(new Error(e).message, null)
     }
 }
+
 
 exports.registerService = async (body, callback) => {
     try {

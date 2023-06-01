@@ -8,6 +8,7 @@ exports.health_check = async(req, res) => {
     })
 }
 
+
 exports.register = async(req, res) => {
     try{
         service.registerService(req.body,function(err, result){
