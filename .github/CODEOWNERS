@@ -1,1 +1,6 @@
+# When someone with admin or owner permissions has enabled required reviews,
+# they also can optionally require approval from a code owner before the author 
+# can merge a pull request in the repository. The Network Operations group most like owns
+# this repository, with the Development group able to author and push pull requests.
+
 
