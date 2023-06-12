@@ -7,9 +7,9 @@ const { generateApiKey } = require('generate-api-key');
 const sendEmail = require('../utils/sendEmail');
 
 const pool = new Pool({
-    user: 'devuser',
+    user: 'postgres',
     database: 'entrada_db',
-    password: 'devuser',
+    password: 'Twende@1357',
     port: 5432,
     host: '127.0.0.1',
 })
@@ -88,6 +88,7 @@ exports.registerService = async (body, callback) => {
             body.is_active = true;
             body.email = body.email.toLowerCase();
             let created_at = new Date();
+            console.log(created_at)
             let updated_at = new Date();
             let package_plan = 'hobby'; //default package plan
             let total_apps = 0;

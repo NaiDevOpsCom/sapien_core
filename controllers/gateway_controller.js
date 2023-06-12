@@ -11,9 +11,9 @@ const requestIp = require('request-ip');
 const { logger } = require('../config/logger');
 
 const pool = new Pool({
-    user: 'devuser',
+    user: 'postgres',
     database: 'entrada_db',
-    password: 'devuser',
+    password: 'Twende@1357',
     port: 5432,
     host: '127.0.0.1',
 })
@@ -58,7 +58,7 @@ function getAppConfigs(appName) {
 
                 reject(error)
             }
-            resolve(results.rows[0])
+            // resolve(results.rows[0])
         })
     })
 

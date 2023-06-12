@@ -20,6 +20,7 @@ function authenticateToken(req, res, next) {
 module.exports = (app) => {
     router.get('/health_check',controller.health_check) // System health Checker
 
+
     router.post('/register',controller.register)
     
     router.post('/login',controller.login)
