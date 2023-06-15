@@ -58,9 +58,9 @@ async function auditLog(req) {
         let guid = uuidv4();
         let user = req.user;
         let activity = req.activity;
-        let created_at = new Date();
+        let created_at = ChangeTime();
         let created_by = req.user;
-        let updated_at = new Date();
+        let updated_at = ChangeTime();
         let updated_by = req.user;
 
         let results = await pool.query('INSERT INTO user_activity_audit_log (guid,"user",activity,created_at,\
@@ -80,6 +80,16 @@ async function auditLog(req) {
     }
 }
 
+//This converts time
+function ChangeTime(){
+    const moment = require('moment');
+
+    const currentTime = moment();
+
+    const formattedTimestamp = currentTime.format('YYYY-MM-DD HH:mm:ssZ');
+    return formattedTimestamp
+}
+
 
 exports.registerService = async (body, callback) => {
     try {
@@ -87,9 +97,13 @@ exports.registerService = async (body, callback) => {
             body.guid = uuidv4();
             body.is_active = true;
             body.email = body.email.toLowerCase();
-            let created_at = new Date();
-            console.log(created_at)
-            let updated_at = new Date();
+            // let created_at = ChangeTime();
+            let created_at = ChangeTime()
+            console.log(typeof(created_at))
+            // console.log(formattedTimestamp);
+
+            // let updated_at = ChangeTime();
+            let updated_at = ChangeTime();
             let package_plan = 'hobby'; //default package plan
             let total_apps = 0;
             body.password = await bcrypt.hash(body.password, saltRounds);
@@ -151,8 +165,8 @@ exports.loginService = async (body, callback) => {
 
 exports.forgotPasswordService = async (body, callback) => {
     try {
-        let created_at = new Date();
-        let updated_at = new Date();
+        let created_at = ChangeTime();
+        let updated_at = ChangeTime();
         let results = await pool.query('SELECT * FROM users WHERE email = $1', [body.email]);
         if (results.rows.length > 0) {
             let token = Math.floor(1000 + Math.random() * 9000);
@@ -227,7 +241,7 @@ exports.getUserService = async (params, callback) => {
 
 exports.updateUserService = async (req, callback) => {
     try {
-        req.body.updated_at = new Date();
+        req.body.updated_at = ChangeTime();
         req.body.updated_by = req.user.guid;
 
         let results = await pool.query('UPDATE users SET first_name = COALESCE($1,first_name), last_name = COALESCE($2,last_name), company = COALESCE($3,company), \
@@ -245,7 +259,7 @@ exports.updateUserService = async (req, callback) => {
 
 exports.updatePlanService = async (req, callback) => {
     try {
-        req.body.updated_at = new Date();
+        req.body.updated_at = ChangeTime();
         req.body.updated_by = req.user.guid;
 
         let results = await pool.query('UPDATE users SET package_plan = COALESCE($1,package_plan), updated_at = $2,updated_by=$3 WHERE guid = $4', [req.body.package_plan, req.body.updated_at, req.body.updated_by, req.user.guid]);
@@ -289,8 +303,8 @@ exports.createUserAppService = async (req, callback) => {
             if (package_plan == 'hobby') {
                 if (total_apps < 3) {
                     if (app_name_validator(req.body.app_name)) {
-                        req.body.created_at = new Date();
-                        req.body.updated_at = new Date();
+                        req.body.created_at = ChangeTime();
+                        req.body.updated_at = ChangeTime();
                         req.body.created_by = req.user.guid
                         req.body.users = req.user.guid
                         req.body.guid = uuidv4();
@@ -333,8 +347,8 @@ exports.createUserAppService = async (req, callback) => {
             } else if (package_plan == 'standard') {
                 if (total_apps < 8) {
                     if (app_name_validator(req.body.app_name)) {
-                        req.body.created_at = new Date();
-                        req.body.updated_at = new Date();
+                        req.body.created_at = ChangeTime();
+                        req.body.updated_at = ChangeTime();
                         req.body.created_by = req.user.guid
                         req.body.users = req.user.guid
                         req.body.guid = uuidv4();
@@ -377,8 +391,8 @@ exports.createUserAppService = async (req, callback) => {
             } else if (package_plan == 'performance') {
                 console.log(req.body)
                 if (app_name_validator(req.body.app_name)) {
-                    req.body.created_at = new Date();
-                    req.body.updated_at = new Date();
+                    req.body.created_at = ChangeTime();
+                    req.body.updated_at = ChangeTime();
                     req.body.created_by = req.user.guid
                     req.body.users = req.user.guid
                     req.body.guid = uuidv4();
@@ -484,7 +498,7 @@ exports.updateAppService = async (req, callback) => {
         }
 
 
-        req.body.updated_at = new Date();
+        req.body.updated_at = ChangeTime();
         req.body.updated_by = req.user.guid;
 
         if (req.body.app_name) {
@@ -665,7 +679,7 @@ exports.userAuditLogService = async(req,callback) =>{
 
 exports.feedbackService =async(req,callback)=>{
     try{
-        req.body.created_at = new Date()
+        req.body.created_at = ChangeTime()
         let results = await pool.query('INSERT INTO feedbacks (guid,"user",feedback_text,rating,created_at) VALUES ($1,$2,$3,$4,$5)',[uuidv4(),req.user.guid,req.body.feedback_text,req.body.rating,req.body.created_at]);
         if(results){
             callback(null,"Feedback sent successfully")
